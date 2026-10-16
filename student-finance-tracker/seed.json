@@ -1,0 +1,110 @@
+[
+  {
+    "id": "sample-001",
+    "type": "income",
+    "amount": 120000,
+    "description": "Monthly allowance",
+    "category": "Allowance",
+    "date": "2026-10-01",
+    "notes": "Money sent by family"
+  },
+  {
+    "id": "sample-002",
+    "type": "expense",
+    "amount": 4500,
+    "description": "Campus lunch",
+    "category": "Food",
+    "date": "2026-10-02",
+    "notes": "Lunch after class"
+  },
+  {
+    "id": "sample-003",
+    "type": "expense",
+    "amount": 1800,
+    "description": "Bus to campus",
+    "category": "Transport",
+    "date": "2026-10-02",
+    "notes": ""
+  },
+  {
+    "id": "sample-004",
+    "type": "expense",
+    "amount": 9000,
+    "description": "Programming book",
+    "category": "School",
+    "date": "2026-10-03",
+    "notes": "Software engineering reading"
+  },
+  {
+    "id": "sample-005",
+    "type": "income",
+    "amount": 25000,
+    "description": "Weekend freelance task",
+    "category": "Salary",
+    "date": "2026-10-04",
+    "notes": "Small website update"
+  },
+  {
+    "id": "sample-006",
+    "type": "expense",
+    "amount": 6500,
+    "description": "Groceries",
+    "category": "Food",
+    "date": "2026-10-05",
+    "notes": "Breakfast and snacks"
+  },
+  {
+    "id": "sample-007",
+    "type": "expense",
+    "amount": 2200,
+    "description": "Moto ride",
+    "category": "Transport",
+    "date": "2026-10-06",
+    "notes": "Late for a study session"
+  },
+  {
+    "id": "sample-008",
+    "type": "expense",
+    "amount": 15000,
+    "description": "Internet bundle",
+    "category": "Other",
+    "date": "2026-10-07",
+    "notes": "Monthly study data"
+  },
+  {
+    "id": "sample-009",
+    "type": "expense",
+    "amount": 7000,
+    "description": "Notebook and pens",
+    "category": "School",
+    "date": "2026-10-08",
+    "notes": "Class supplies"
+  },
+  {
+    "id": "sample-010",
+    "type": "income",
+    "amount": 10000,
+    "description": "Sold old headphones",
+    "category": "Other",
+    "date": "2026-10-09",
+    "notes": "Second-hand sale"
+  },
+  {
+    "id": "sample-011",
+    "type": "expense",
+    "amount": 5000,
+    "description": "Football with friends",
+    "category": "Other",
+    "date": "2026-10-10",
+    "notes": "Weekend activity"
+  },
+  {
+    "id": "sample-012",
+    "type": "expense",
+    "amount": 3000,
+    "description": "Coffee and snack",
+    "category": "Food",
+    "date": "2026-10-11",
+    "notes": "Group project meeting"
+  }
+]
