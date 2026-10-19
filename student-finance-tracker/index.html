@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A simple student finance tracker for recording income and expenses.">
+  <meta name="description" content="Campus Wallet is an accessible student finance tracker for recording income, expenses, spending limits, and savings goals.">
   <title>Campus Wallet | Student Finance Tracker</title>
   <link rel="stylesheet" href="styles/style.css">
   <script src="scripts/validators.js" defer></script>
@@ -20,11 +20,17 @@
       <div class="brand-mark" aria-hidden="true">CW</div>
       <div><p class="eyebrow">STUDENT MONEY, MADE SIMPLE</p><h1>Campus Wallet</h1></div>
     </div>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#records">Records</a>
+      <a href="#settings">Settings</a>
+      <a href="#about">About</a>
+    </nav>
     <button id="load-sample" class="button button-secondary" type="button">Load sample data</button>
   </header>
 
   <main id="main-content" class="page-shell">
-    <section class="welcome-row" aria-labelledby="welcome-title">
+    <section id="dashboard" class="welcome-row" aria-labelledby="welcome-title">
       <div><p class="eyebrow">YOUR MONEY OVERVIEW</p><h2 id="welcome-title">Keep an eye on your money.</h2>
       <p class="muted">Record what comes in, track what goes out, and make a plan that works for student life.</p></div>
       <div class="period-pill"><span class="status-dot" aria-hidden="true"></span> Personal dashboard</div>
@@ -33,7 +39,8 @@
     <section class="stats-grid" aria-label="Finance summary">
       <article class="stat-card"><p class="stat-label">Current balance</p><p id="balance-total" class="stat-value">RWF 0</p><p class="stat-note">Income minus expenses</p></article>
       <article class="stat-card"><p class="stat-label">Money received</p><p id="income-total" class="stat-value">RWF 0</p><p class="stat-note">All recorded income</p></article>
-      <article class="stat-card"><p class="stat-label">Money spent</p><p id="expense-total" class="stat-value">RWF 0</p><p class="stat-note">All recorded expenses</p></article>
+      <article class="stat-card"><p class="stat-label">Money spent</p><p id="expense-total" class="stat-value">RWF 0</p><p class="stat-note">Sum of recorded expenses</p></article>
+      <article class="stat-card"><p class="stat-label">Top spending category</p><p id="top-category" class="stat-value stat-value-text">None yet</p><p id="top-category-note" class="stat-note">Add an expense to calculate it</p></article>
       <article class="stat-card"><p class="stat-label">Transactions</p><p id="record-count" class="stat-value">0</p><p class="stat-note">Records saved on this device</p></article>
     </section>
 
@@ -43,38 +50,40 @@
         <form id="transaction-form" novalidate>
           <input id="record-id" type="hidden">
           <div class="field-row">
-            <div class="field"><label for="type">Transaction type</label><select id="type" name="type" required><option value="expense">Expense</option><option value="income">Income</option></select></div>
-            <div class="field"><label for="amount">Amount (RWF)</label><input id="amount" name="amount" type="number" min="1" step="1" placeholder="e.g. 5000" required></div>
+            <div class="field"><label for="type">Transaction type</label><select id="type" name="type" required><option value="expense">Expense</option><option value="income">Income</option></select><small id="type-error" class="field-error" aria-live="polite"></small></div>
+            <div class="field"><label for="amount">Amount in RWF</label><input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 5000 or 12.50" required aria-describedby="amount-help amount-error"><small id="amount-help">Use a positive number with up to two decimal places.</small><small id="amount-error" class="field-error" aria-live="polite"></small></div>
           </div>
-          <div class="field"><label for="description">Description</label><input id="description" name="description" type="text" maxlength="80" placeholder="e.g. Lunch on campus" required aria-describedby="description-help"><small id="description-help">Use a short description with letters or numbers.</small></div>
+          <div class="field"><label for="description">Description</label><input id="description" name="description" type="text" maxlength="80" placeholder="e.g. Lunch on campus" required aria-describedby="description-help description-error"><small id="description-help">No leading or trailing spaces; extra internal spaces collapse automatically.</small><small id="description-error" class="field-error" aria-live="polite"></small></div>
           <div class="field-row">
-            <div class="field"><label for="category">Category</label><select id="category" name="category" required><option value="Food">Food</option><option value="Transport">Transport</option><option value="School">School</option><option value="Housing">Housing</option><option value="Shopping">Shopping</option><option value="Salary">Salary</option><option value="Allowance">Allowance</option><option value="Other">Other</option></select></div>
-            <div class="field"><label for="date">Date</label><input id="date" name="date" type="date" required></div>
+            <div class="field"><label for="category">Category</label><input id="category" name="category" list="category-options" maxlength="25" placeholder="Food" required aria-describedby="category-help category-error"><datalist id="category-options"></datalist><small id="category-help">Choose a default category or type your own.</small><small id="category-error" class="field-error" aria-live="polite"></small></div>
+            <div class="field"><label for="date">Date</label><input id="date" name="date" type="date" required aria-describedby="date-error"><small id="date-error" class="field-error" aria-live="polite"></small></div>
           </div>
           <div class="field"><label for="notes">Notes (optional)</label><textarea id="notes" name="notes" rows="2" maxlength="180" placeholder="Anything you want to remember"></textarea></div>
-          <p id="form-message" class="form-message" role="alert" aria-live="assertive"></p>
+          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
           <div class="form-actions"><button id="save-button" class="button button-primary" type="submit">Save transaction</button><button id="cancel-edit" class="button button-quiet" type="button" hidden>Cancel edit</button></div>
         </form>
       </section>
 
       <section class="panel goals-panel" aria-labelledby="goal-title">
         <div class="panel-heading"><div><p class="eyebrow">SPENDING PLAN</p><h2 id="goal-title">Weekly expense limit</h2></div><span class="icon-badge icon-badge-green" aria-hidden="true">↗</span></div>
-        <p class="muted">Set a weekly spending limit and check how much you have used.</p>
-        <form id="budget-form" class="budget-form">
-          <div class="field"><label for="weekly-limit">Weekly limit (RWF)</label><input id="weekly-limit" type="number" min="1" step="1" value="50000" required></div>
+        <p class="muted">Set a weekly spending limit. You will be told how much remains or how far over the limit you are.</p>
+        <form id="budget-form" class="budget-form" novalidate>
+          <div class="field"><label for="weekly-limit">Weekly limit in RWF</label><input id="weekly-limit" type="number" min="0.01" step="0.01" value="50000" required aria-describedby="budget-input-error"><small id="budget-input-error" class="field-error" aria-live="polite"></small></div>
           <button class="button button-secondary" type="submit">Update limit</button>
         </form>
         <div class="budget-summary"><span id="budget-used-text">RWF 0 used this week</span><strong id="budget-percent">0%</strong></div>
-        <div class="progress-track" role="progressbar" aria-label="Weekly expense limit used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="budget-progress"><div id="budget-progress-fill" class="progress-fill"></div></div>
-        <p id="budget-message" class="budget-message" aria-live="polite">You are within your weekly limit.</p>
-        <div class="mini-chart-wrap"><h3>Spending by category</h3><div id="category-chart" class="category-chart"><p class="muted">Add expenses to see your spending breakdown.</p></div></div>
+        <div class="progress-track" role="progressbar" aria-label="Weekly expense limit used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0% of weekly limit used" id="budget-progress"><div id="budget-progress-fill" class="progress-fill"></div></div>
+        <p id="budget-message" class="budget-message" role="status" aria-live="polite">RWF 50,000 remaining in your weekly limit.</p>
+        <div class="mini-chart-wrap"><h3>Spending by category</h3><div id="category-chart" class="category-chart" role="list" aria-label="Expense totals by category"><p class="muted">Add expenses to see your spending breakdown.</p></div></div>
+        <div class="mini-chart-wrap"><h3>Last 7 days of spending</h3><div id="trend-chart" class="trend-chart" role="img" aria-label="No expense trend available yet"><p class="muted">Add expenses to see a seven-day trend.</p></div></div>
       </section>
     </section>
 
-    <section class="panel records-panel" aria-labelledby="records-title">
+    <section id="records" class="panel records-panel" aria-labelledby="records-title">
       <div class="panel-heading records-heading"><div><p class="eyebrow">YOUR ACTIVITY</p><h2 id="records-title">Transactions</h2></div><div class="records-tools"><button id="export-json" class="button button-secondary" type="button">Export JSON</button><label class="button button-secondary file-button" for="import-file">Import JSON</label><input id="import-file" type="file" accept="application/json,.json" hidden></div></div>
       <div class="filter-grid">
-        <div class="field search-field"><label for="search">Search records</label><input id="search" type="search" placeholder="Try: /Food|lunch/i" aria-describedby="search-help"><small id="search-help">Regular expressions are supported. Example: /food|transport/i</small></div>
+        <div class="field search-field"><label for="search">Regex search</label><input id="search" type="search" placeholder="Try: food|transport" aria-describedby="search-help"><small id="search-help">Enter a JavaScript regex pattern. Matches are highlighted safely.</small></div>
+        <div class="field checkbox-field"><input id="case-sensitive" type="checkbox"><label for="case-sensitive">Case-sensitive search</label></div>
         <div class="field"><label for="type-filter">Type</label><select id="type-filter"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option></select></div>
         <div class="field"><label for="sort-by">Sort by</label><select id="sort-by"><option value="date-new">Date: newest first</option><option value="date-old">Date: oldest first</option><option value="amount-high">Amount: high to low</option><option value="amount-low">Amount: low to high</option><option value="description">Description: A to Z</option></select></div>
       </div>
@@ -86,19 +95,39 @@
           <tbody id="transaction-list"><tr><td colspan="6" class="empty-state">No transactions yet. Add your first record above.</td></tr></tbody>
         </table>
       </div>
-      <div class="data-actions"><button id="clear-all" class="text-button danger-text" type="button">Clear all records</button><span id="storage-status" class="muted">Saved locally on this device</span></div>
+      <div class="data-actions"><button id="clear-all" class="text-button danger-text" type="button">Clear all records</button><span id="storage-status" class="muted" role="status">Saved locally on this device</span></div>
     </section>
 
-    <section class="panel settings-panel" aria-labelledby="settings-title">
+    <section id="settings" class="panel settings-panel" aria-labelledby="settings-title">
       <div class="panel-heading"><div><p class="eyebrow">PREFERENCES</p><h2 id="settings-title">Settings</h2></div></div>
-      <div class="settings-grid">
-        <div class="field"><label for="currency">Display currency</label><select id="currency"><option value="RWF">RWF — Rwandan franc</option><option value="USD">USD — US dollar</option><option value="EUR">EUR — Euro</option></select><small>Changing this setting changes the label only. It does not convert saved amounts.</small></div>
-        <div class="field"><label for="compact-mode">Display</label><select id="compact-mode"><option value="comfortable">Comfortable spacing</option><option value="compact">Compact spacing</option></select><small>Compact spacing can help on smaller screens.</small></div>
-      </div>
+      <form id="settings-form" novalidate>
+        <div class="settings-grid">
+          <div class="field"><label for="currency">Display currency</label><select id="currency"><option value="RWF">RWF — Rwandan franc (base)</option><option value="USD">USD — US dollar</option><option value="EUR">EUR — Euro</option></select><small>All saved amounts are held in RWF and converted only for display.</small></div>
+          <div class="field"><label for="rate-usd">1 USD equals how many RWF?</label><input id="rate-usd" type="number" min="0.0001" step="0.0001" required><small id="rate-usd-error" class="field-error" aria-live="polite"></small></div>
+          <div class="field"><label for="rate-eur">1 EUR equals how many RWF?</label><input id="rate-eur" type="number" min="0.0001" step="0.0001" required><small id="rate-eur-error" class="field-error" aria-live="polite"></small></div>
+          <div class="field"><label for="compact-mode">Display density</label><select id="compact-mode"><option value="comfortable">Comfortable spacing</option><option value="compact">Compact spacing</option></select><small>Compact spacing can help on smaller screens.</small></div>
+        </div>
+        <button class="button button-secondary" type="submit">Save settings</button>
+      </form>
+      <section class="category-settings" aria-labelledby="category-settings-title">
+        <h3 id="category-settings-title">Editable categories</h3>
+        <p class="muted">Food, Books, Transport, Entertainment, Fees, and Other are included by default. Add or remove categories to suit your budget.</p>
+        <form id="category-form" class="category-form" novalidate><label class="visually-hidden" for="new-category">New category name</label><input id="new-category" type="text" maxlength="25" placeholder="e.g. Housing" aria-describedby="new-category-error"><button class="button button-secondary" type="submit">Add category</button><small id="new-category-error" class="field-error" aria-live="polite"></small></form>
+        <ul id="category-list" class="category-list" aria-live="polite"></ul>
+      </section>
+    </section>
+
+    <section id="about" class="panel about-panel" aria-labelledby="about-title">
+      <div class="panel-heading"><div><p class="eyebrow">ABOUT THIS PROJECT</p><h2 id="about-title">A practical budget tool for student life</h2></div></div>
+      <p>Campus Wallet is a responsive, accessible vanilla HTML, CSS, and JavaScript project. It helps students record income and expenses, review spending patterns, and manage a weekly limit without a server account.</p>
+      <address class="contact-list">Contact: <a href="https://github.com/ynshuti-cloud">GitHub: ynshuti-cloud</a> · <a href="mailto:y.nshuti@alustudent.com">y.nshuti@alustudent.com</a></address>
     </section>
 
     <p id="app-announcement" class="visually-hidden" role="status" aria-live="polite"></p>
   </main>
-  <footer class="site-footer"><p>Campus Wallet · A student project made with HTML, CSS and JavaScript.</p><p>Your records stay in this browser unless you export them.</p></footer>
+  <footer class="site-footer"><p>Campus Wallet · A student project made with HTML, CSS, and JavaScript.</p><p>Your records stay in this browser unless you export them.</p></footer>
 </body>
 </html>
+
+
+

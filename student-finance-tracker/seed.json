@@ -1,110 +1,134 @@
 [
   {
-    "id": "sample-001",
+    "id": "tx-sample-001",
     "type": "income",
     "amount": 120000,
     "description": "Monthly allowance",
-    "category": "Allowance",
+    "category": "Other",
     "date": "2026-10-01",
-    "notes": "Money sent by family"
+    "notes": "Money sent by family",
+    "createdAt": "2026-10-01T08:00:00.000Z",
+    "updatedAt": "2026-10-01T08:00:00.000Z"
   },
   {
-    "id": "sample-002",
+    "id": "tx-sample-002",
     "type": "expense",
     "amount": 4500,
     "description": "Campus lunch",
     "category": "Food",
-    "date": "2026-10-02",
-    "notes": "Lunch after class"
+    "date": "2026-10-10",
+    "notes": "Lunch after class",
+    "createdAt": "2026-10-10T11:30:00.000Z",
+    "updatedAt": "2026-10-10T11:30:00.000Z"
   },
   {
-    "id": "sample-003",
+    "id": "tx-sample-003",
     "type": "expense",
     "amount": 1800,
     "description": "Bus to campus",
     "category": "Transport",
-    "date": "2026-10-02",
-    "notes": ""
+    "date": "2026-10-11",
+    "notes": "Morning ride",
+    "createdAt": "2026-10-11T07:20:00.000Z",
+    "updatedAt": "2026-10-11T07:20:00.000Z"
   },
   {
-    "id": "sample-004",
+    "id": "tx-sample-004",
     "type": "expense",
     "amount": 9000,
     "description": "Programming book",
-    "category": "School",
-    "date": "2026-10-03",
-    "notes": "Software engineering reading"
+    "category": "Books",
+    "date": "2026-10-12",
+    "notes": "Software engineering reading",
+    "createdAt": "2026-10-12T14:15:00.000Z",
+    "updatedAt": "2026-10-12T14:15:00.000Z"
   },
   {
-    "id": "sample-005",
+    "id": "tx-sample-005",
     "type": "income",
     "amount": 25000,
     "description": "Weekend freelance task",
-    "category": "Salary",
-    "date": "2026-10-04",
-    "notes": "Small website update"
+    "category": "Other",
+    "date": "2026-10-13",
+    "notes": "Small website update",
+    "createdAt": "2026-10-13T17:45:00.000Z",
+    "updatedAt": "2026-10-13T17:45:00.000Z"
   },
   {
-    "id": "sample-006",
+    "id": "tx-sample-006",
     "type": "expense",
     "amount": 6500,
     "description": "Groceries",
     "category": "Food",
-    "date": "2026-10-05",
-    "notes": "Breakfast and snacks"
+    "date": "2026-10-14",
+    "notes": "Breakfast and snacks",
+    "createdAt": "2026-10-14T18:10:00.000Z",
+    "updatedAt": "2026-10-14T18:10:00.000Z"
   },
   {
-    "id": "sample-007",
+    "id": "tx-sample-007",
     "type": "expense",
     "amount": 2200,
     "description": "Moto ride",
     "category": "Transport",
-    "date": "2026-10-06",
-    "notes": "Late for a study session"
+    "date": "2026-10-15",
+    "notes": "Late for a study session",
+    "createdAt": "2026-10-15T08:10:00.000Z",
+    "updatedAt": "2026-10-15T08:10:00.000Z"
   },
   {
-    "id": "sample-008",
+    "id": "tx-sample-008",
     "type": "expense",
     "amount": 15000,
-    "description": "Internet bundle",
-    "category": "Other",
-    "date": "2026-10-07",
-    "notes": "Monthly study data"
+    "description": "Movie night ticket",
+    "category": "Entertainment",
+    "date": "2026-10-16",
+    "notes": "Weekend activity",
+    "createdAt": "2026-10-16T19:00:00.000Z",
+    "updatedAt": "2026-10-16T19:00:00.000Z"
   },
   {
-    "id": "sample-009",
+    "id": "tx-sample-009",
     "type": "expense",
-    "amount": 7000,
-    "description": "Notebook and pens",
-    "category": "School",
-    "date": "2026-10-08",
-    "notes": "Class supplies"
+    "amount": 1,
+    "description": "Archive fee",
+    "category": "Fees",
+    "date": "2024-02-29",
+    "notes": "Leap-day edge case",
+    "createdAt": "2024-02-29T09:00:00.000Z",
+    "updatedAt": "2024-02-29T09:00:00.000Z"
   },
   {
-    "id": "sample-010",
+    "id": "tx-sample-010",
+    "type": "expense",
+    "amount": 250000,
+    "description": "Semester tuition payment",
+    "category": "Fees",
+    "date": "2026-01-01",
+    "notes": "Large-number edge case",
+    "createdAt": "2026-01-01T12:00:00.000Z",
+    "updatedAt": "2026-01-02T08:30:00.000Z"
+  },
+  {
+    "id": "tx-sample-011",
     "type": "income",
-    "amount": 10000,
-    "description": "Sold old headphones",
+    "amount": 0.5,
+    "description": "Refund credit",
     "category": "Other",
-    "date": "2026-10-09",
-    "notes": "Second-hand sale"
+    "date": "2025-12-31",
+    "notes": "Small decimal amount",
+    "createdAt": "2025-12-31T10:00:00.000Z",
+    "updatedAt": "2025-12-31T10:00:00.000Z"
   },
   {
-    "id": "sample-011",
-    "type": "expense",
-    "amount": 5000,
-    "description": "Football with friends",
-    "category": "Other",
-    "date": "2026-10-10",
-    "notes": "Weekend activity"
-  },
-  {
-    "id": "sample-012",
+    "id": "tx-sample-012",
     "type": "expense",
     "amount": 3000,
     "description": "Coffee and snack",
     "category": "Food",
-    "date": "2026-10-11",
-    "notes": "Group project meeting"
+    "date": "2026-10-16",
+    "notes": "Group project meeting",
+    "createdAt": "2026-10-16T09:20:00.000Z",
+    "updatedAt": "2026-10-16T09:20:00.000Z"
   }
 ]

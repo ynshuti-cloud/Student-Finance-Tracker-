@@ -1,36 +1,111 @@
 # Campus Wallet — Student Finance Tracker
 
-A beginner-friendly finance tracker built with plain HTML, CSS and JavaScript. It is designed for students who want to record money received and money spent without needing an account or a server.
+Campus Wallet is an accessible, responsive finance tracker built with vanilla HTML, CSS, and JavaScript. It helps students record income and expenses, search records with regular expressions, set a weekly spending limit, view a seven-day trend, and save a JSON backup.
 
-## 1. Run the project
+**Theme:** Student Finance Tracker<br>
+**Base currency:** RWF (Rwandan franc)<br>
+**Contact:** [ynshuti-cloud on GitHub](https://github.com/ynshuti-cloud) · [y.nshuti@alustudent.com](mailto:y.nshuti@alustudent.com)
 
-1. Download and unzip the project folder.
-2. Open the folder in Visual Studio Code.
-3. Install the **Live Server** extension if you do not already have it.
-4. Right-click `index.html` and choose **Open with Live Server**.
-5. The app opens in your browser. Select **Load sample data** to add the 12 example transactions.
+> GitHub Pages URL: publish this repository, then replace this line with the verified live URL (expected format: `https://ynshuti-cloud.github.io/student-finance-tracker/`).
+>
+> Demo video: record the required 2–3 minute demo and replace this line with its accessible unlisted URL before submission.
 
-You can also open `index.html` directly for most features. Use Live Server for sample-data loading and testing because browsers can block `fetch()` when a page is opened as a local file.
+## Run the project
 
-## 2. Features implemented
+1. Download or clone the repository.
+2. Open the `student-finance-tracker` folder in Visual Studio Code.
+3. Start it with the **Live Server** extension, or run a local static web server in that folder.
+4. Open `index.html` and select **Load sample data**.
+5. Open `tests.html` from the same server to run the automated browser checks.
 
-- Add income and expense transactions.
-- Edit and delete a transaction using the form and row action buttons.
-- Validate type, positive amount, description, category, date and notes.
-- Show balance, total income, total expenses and record count.
-- Search with plain text or JavaScript regular expressions, and highlight matches.
-- Filter by income/expense and sort by date, amount or description.
-- Set a weekly expense limit with a progress bar and a live warning when nearing or passing the limit.
-- Show the five highest expense categories in a small chart.
-- Save records and settings in `localStorage`.
-- Export records to JSON and import a JSON array after validation.
-- Choose a display currency label and comfortable/compact spacing.
-- Responsive layout for phone, tablet and desktop widths.
-- Keyboard support: `/` focuses search when you are not typing in a field; `Escape` clears search when the search field is focused.
+Opening `index.html` directly supports most features, but a web server is required for loading `seed.json` because browsers can block `fetch()` from local files.
 
-**Currency note:** The currency setting changes the label only. It does not convert saved values or use live exchange rates.
+## Features
 
-## 3. Project structure
+- Add income and expense records with a unique `id`, `createdAt`, and `updatedAt` timestamp.
+- Validate fields while typing and when submitting the form.
+- Edit each transaction inline, confirm deletes, and update totals immediately.
+- Search records with JavaScript regex patterns, toggle case sensitivity, and highlight visible matches with `<mark>`.
+- Sort by date, amount, or description and filter by transaction type.
+- See balance, income, expenses, record count, top spending category, category totals, and a seven-day spending trend.
+- Set a weekly spending cap; the app announces the remaining balance politely and overages assertively.
+- Store data and preferences in `localStorage`, including graceful recovery from malformed storage data.
+- Export a complete JSON backup and import only structurally validated JSON records.
+- Convert display amounts from the RWF base currency to USD or EUR with manual rates saved in Settings.
+- Add and remove spending categories. Defaults are Food, Books, Transport, Entertainment, Fees, and Other.
+- Switch between comfortable and compact density.
+
+## Record data model
+
+```js
+{
+  id: "tx-mgx7k82-f3q1r8",
+  type: "expense",
+  amount: 4500,
+  description: "Campus lunch",
+  category: "Food",
+  date: "2026-10-16",
+  notes: "Lunch after class",
+  createdAt: "2026-10-16T11:30:00.000Z",
+  updatedAt: "2026-10-16T11:30:00.000Z"
+}
+```
+
+Amounts are stored in RWF. USD and EUR rates are entered manually in Settings; no external currency API is used.
+
+## Regex catalogue
+
+| Field or feature | Pattern | Example | Purpose |
+|---|---|---|---|
+| Description | `/^(?!.*\s{2})(?=.{2,80}$)[A-Za-z0-9][A-Za-z0-9 '&.,()/-]*[A-Za-z0-9.)]$/` | `Campus lunch` | Requires 2–80 valid characters and prevents leading/trailing spaces; the UI collapses repeated internal spaces on blur and save. |
+| Amount | `/^(0|[1-9]\d*)(\.\d{1,2})?$/` | `5000`, `12.50` | Accepts a whole number or one/two decimal places; app logic additionally requires an amount above zero. |
+| Date | `/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/` | `2026-10-16` | Checks the YYYY-MM-DD shape; JavaScript also rejects impossible calendar dates. |
+| Category | `/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/` | `School-Fees` | Allows letters separated by one space or hyphen. |
+| Advanced duplicate-word rule | `/\b(\w+)\s+\1\b/i` | `coffee coffee` | Uses a **back-reference** to reject a repeated adjacent word in a description. |
+| Live regex search | `food|transport` | `/food|transport/i` | Finds either term. The checkbox controls whether matching is case-sensitive. |
+
+An invalid search pattern—for example `[`—is caught with `try/catch`, announced to the user, and never crashes the page.
+
+## Keyboard map
+
+| Key | Action |
+|---|---|
+| `Tab` / `Shift+Tab` | Move forward/back through every interactive control. |
+| `Enter` / `Space` | Activate focused buttons, links, checkboxes, and form controls. |
+| `/` | Focus the regex search field when not already typing in a form control. |
+| `Escape` | Clear the focused regex search field. |
+| Skip link | The first keyboard focus lets a user jump directly to main content. |
+
+## Accessibility notes
+
+- Semantic `header`, `nav`, `main`, `section`, `form`, `table`, and `footer` landmarks are used with a heading hierarchy.
+- Labels are explicitly associated with every input; inline edit inputs have accessible labels.
+- Strong visible focus styles, a skip link, keyboard-only controls, and keyboard search shortcuts are provided.
+- Validation, search, import, storage, and save messages use `role="status"`, `role="alert"`, or `aria-live`.
+- The weekly cap is polite while under budget and assertive when over budget.
+- The table has a caption, scoped column headers, descriptive action labels, and safely escaped rendered content.
+- Text colors and focus styles use high-contrast values; the responsive layout is mobile-first at 360px, tablet at 768px, and desktop at 1024px.
+- Search matches use native `<mark>` elements, which preserve readable text for assistive technology.
+
+## Tests
+
+Open `tests.html` using the same web server. It runs 21 browser tests for validation, timestamps, duplicate IDs, safe regex search, case sensitivity, totals, category totals, and the seven-day trend.
+
+Also complete this manual test checklist before submitting:
+
+1. Add an income and expense; confirm all dashboard values update.
+2. Test zero, `12.345`, an impossible date, leading spaces, double spaces, and `coffee coffee`.
+3. Edit a table row inline and verify `updatedAt` changes in an exported JSON file.
+4. Delete a record and cancel a delete confirmation.
+5. Search `food|transport`, enable case-sensitive mode, and search invalid `[`.
+6. Change all sort choices and both type filters.
+7. Set a low weekly limit and listen for the remaining/overage announcement.
+8. Change to USD/EUR, set manual rates, and confirm displayed numbers convert.
+9. Add and remove a category.
+10. Export records, clear them, import the export, and reload the page.
+11. Resize at approximately 360px, 768px, and 1024px; test with keyboard only.
+
+## Project structure
 
 ```text
 student-finance-tracker/
@@ -38,8 +113,7 @@ student-finance-tracker/
 ├── tests.html
 ├── seed.json
 ├── README.md
-├── styles/
-│   └── style.css
+├── styles/style.css
 ├── scripts/
 │   ├── main.js
 │   ├── validators.js
@@ -47,8 +121,7 @@ student-finance-tracker/
 │   ├── state.js
 │   ├── search.js
 │   └── ui.js
-├── tests/
-│   └── tests.js
+├── tests/tests.js
 └── docs/
     ├── project-spec.md
     ├── wireframes.md
@@ -56,76 +129,15 @@ student-finance-tracker/
     └── demo-script.md
 ```
 
-## 4. Regex catalogue
+## Publish with GitHub Pages
 
-The main patterns are in `scripts/validators.js`.
+1. Create a GitHub repository named `student-finance-tracker` under your own account.
+2. Ensure the contents of this folder are at the repository root.
+3. Commit your genuine development progress and push the `main` branch.
+4. In GitHub, choose **Settings → Pages → Deploy from a branch → main → /(root)**.
+5. Wait for GitHub Pages to report a live URL, open it, and test sample loading, import/export, and navigation.
+6. Put the actual verified URL at the top of this README, record the 2–3 minute demo video, and add its accessible link too.
 
-| Name | Pattern | Purpose |
-|---|---|---|
-| Description | `^[A-Za-z0-9][A-Za-z0-9 '&.,()/-]{1,79}$` | Allows a readable description between 2 and 80 characters, beginning with a letter or number. |
-| Category | `^[A-Za-z][A-Za-z ]{1,24}$` | Allows a category made from letters and spaces. |
-| Date format | `^\d{4}-\d{2}-\d{2}$` | Checks the YYYY-MM-DD shape; JavaScript date checking also rejects impossible dates. |
-| Positive amount | `^[1-9]\d*(\.\d{1,2})?$` | Allows a positive whole number or an amount with one or two decimal places. |
-| Regex search | `/food|transport/i` | Finds records containing either word without case sensitivity. |
-| Plain search | `lunch` | Searches for the literal text “lunch”; special regex characters are escaped automatically. |
+## Academic integrity
 
-Search examples:
-- `/food|transport/i` — matches Food or Transport.
-- `/^monthly/i` — description or other searchable text beginning with “monthly”.
-- `/book|school/i` — matches records with book or school in the searchable text.
-- `lunch` — normal text search.
-
-If a slash-delimited regular expression is malformed, the app displays a message instead of crashing.
-
-## 5. Accessibility notes
-
-- The page uses semantic `header`, `main`, `section`, `form`, `table` and `footer` elements.
-- Inputs have visible labels.
-- A skip link lets keyboard users skip to the main content.
-- Focus indicators are visible when navigating with a keyboard.
-- Important messages use `role="alert"` or `aria-live`.
-- The budget progress bar exposes its value through ARIA attributes.
-- The table has a caption and column headers.
-- Buttons have readable names, including names that identify the transaction being edited or deleted.
-- The interface remains usable at narrow screen widths and the table can scroll horizontally if necessary.
-
-## 6. Test plan
-
-Open `tests.html` using Live Server. It runs 12 browser-based checks covering validation, invalid imports, search parsing and basic calculations. Then test these manual scenarios:
-
-1. Add a valid expense and confirm the table and dashboard update.
-2. Try an amount of `0`, a negative amount, a blank description and an impossible date.
-3. Edit an existing record and confirm the changed values appear.
-4. Delete a record and confirm totals change.
-5. Search for `/food|transport/i`, then try an invalid pattern such as `/[/`.
-6. Change the sort order and transaction type filter.
-7. Set a low weekly limit and confirm the warning appears as expenses approach or pass it.
-8. Export JSON, clear or change records, and import the exported file.
-9. Reload the page and confirm records remain saved.
-10. Resize the browser to around 360 px, 768 px and 1024 px.
-11. Use Tab, Shift+Tab, Enter, `/` and Escape without a mouse.
-
-## 7. Deploy to GitHub Pages
-
-1. Create a GitHub repository named `student-finance-tracker`.
-2. Put all project files in the repository root (not inside an extra nested project folder).
-3. In VS Code terminal, run:
-
-   ```bash
-   git init
-   git add .
-   git commit -m "Build Campus Wallet student finance tracker"
-   git branch -M main
-   git remote add origin https://github.com/YOUR-USERNAME/student-finance-tracker.git
-   git push -u origin main
-   ```
-
-4. Replace `YOUR-USERNAME` with your own GitHub username.
-5. In the repository, open **Settings → Pages**.
-6. Under build and deployment, select **Deploy from a branch**, choose `main` and `/ (root)`, then save.
-7. Wait for the published link to appear in the Pages section.
-8. Open the link and check the main features. Keep `seed.json` at the repository root so sample data can load.
-
-## 8. Academic integrity and final checks
-
-Make sure you understand each file and can explain the validation, search, storage and rendering functions. Adjust labels and styling in your own words if needed, and follow your course rules for disclosing assistance. The demo video and GitHub publication must be completed by you using the instructions in `docs/demo-script.md` and the deployment steps above.
+Review and understand every feature before presenting it. Use your own GitHub account as the only contributor, retain honest commits that reflect your work, and explain any permitted assistance according to your course policy.
