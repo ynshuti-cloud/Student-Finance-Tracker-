@@ -144,6 +144,7 @@ Review and understand every feature before presenting it. Use your own GitHub ac
 
 You can find my site:  https://ynshuti-cloud.github.io/Student-Finance-Tracker-/
 
-Report Image: <img width="1086" height="632" alt="image" src="https://github.com/user-attachments/assets/fddd187b-1094-4140-bdf1-040319a85c0f" />
+Report Image: <img width="1130" height="642" alt="image" src="https://github.com/user-attachments/assets/0026c83b-66f6-421b-a9cd-b100d8b1c0a3" />
+
 
 
