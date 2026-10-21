@@ -147,4 +147,7 @@ You can find my site:  https://ynshuti-cloud.github.io/Student-Finance-Tracker-/
 Report Image: <img width="1130" height="642" alt="image" src="https://github.com/user-attachments/assets/0026c83b-66f6-421b-a9cd-b100d8b1c0a3" />
 
 
+Demo Video:  https://www.loom.com/share/20f7fcb14d1b48b2b463cee02e069c6f
+
+
 
